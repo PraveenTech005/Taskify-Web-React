@@ -3,9 +3,11 @@ import NavBar from "./components/NavBar";
 import { IoMdAdd } from "react-icons/io";
 import { FaFilter, FaRegEdit, FaSort } from "react-icons/fa";
 import NEVModal from "./NEVModal";
-import List from "./data";
+import { deleteTask, exportTasks } from "./data";
+import { MdDeleteForever } from "react-icons/md";
 
 const Home = () => {
+  const [task, setTask] = useState(exportTasks());
   const [showModal, setShowModal] = useState(false);
   const [modal, setModal] = useState({
     type: "",
@@ -29,12 +31,12 @@ const Home = () => {
           </button>
         </div>
         <div className="w-full flex flex-col space-y-5 p-3">
-          {List.map((item, index) => (
+          {task.map((item) => (
             <div
-              key={index}
+              key={item.id}
               className="w-full flex flex-row justify-between items-center py-3 px-5 bg-neutral-300 dark:bg-neutral-800 rounded-2xl"
               onClick={() => {
-                setModal({ type: "View", id: index });
+                setModal({ type: "View", id: item.id });
                 setShowModal(true);
               }}
             >
@@ -44,16 +46,28 @@ const Home = () => {
                 <h3>{item.due}</h3>
               </div>
               <div className=" w-2/12 h-full flex flex-col justify-evenly items-center space-y-5">
-                <button
-                  className="p-3"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setModal({ type: "Edit", id: index });
-                    setShowModal(true);
-                  }}
-                >
-                  <FaRegEdit size={25} />
-                </button>
+                <div className="flex flex-row justify-evenly items-center">
+                  <button
+                    className="p-3"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setModal({ type: "Edit", id: item.id });
+                      setShowModal(true);
+                    }}
+                  >
+                    <FaRegEdit size={25} />
+                  </button>
+                  <button
+                    className="p-3"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteTask(item.id);
+                      setTask(exportTasks());
+                    }}
+                  >
+                    <MdDeleteForever color="#bf0000" size={25} />
+                  </button>
+                </div>
                 <p
                   className={`p-2 px-4 rounded-full ${
                     item.priority === "Low"

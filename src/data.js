@@ -1,32 +1,44 @@
-let List = [
-  // {
-  //   title: "Cycling",
-  //   description: "Ride a Bicycle",
-  //   due: "20-03-2025",
-  //   priority: "Low",
-  // },
-  // {
-  //   title: "Biking",
-  //   description: "Ride a Bike",
-  //   due: "20-03-2025",
-  //   priority: "Average",
-  // },
-  // {
-  //   title: "Jogging",
-  //   description: "Go For a Jog",
-  //   due: "20-03-2025",
-  //   priority: "High",
-  // },
+let Tasks = [
+  {
+    id: 0,
+    title: "Cycling",
+    description: "Ride a Bicycle",
+    due: "20-03-2025",
+    priority: "Low",
+  },
+  {
+    id: 1,
+    title: "Biking",
+    description: "Ride a Bike",
+    due: "20-03-2025",
+    priority: "Average",
+  },
+  {
+    id: 2,
+    title: "Jogging",
+    description: "Go For a Jog",
+    due: "20-03-2025",
+    priority: "High",
+  },
 ];
+const exportTasks = () => {
+  return Tasks;
+};
 
-// const newTask = () => {};
+const newTask = (task) => {
+  const newData = { ...task, id: Tasks.length };
+  Tasks.push(newData);
+};
 
-// const updateTask = () => {
+const updateTask = (task, id) => {
+  Tasks[id] = task;
+};
 
-// }
+const deleteTask = (id) => {
+  const data = Tasks.filter((task) => task.id !== id);
+  console.log(data);
+  Tasks = data;
+};
 
-// const deleteTask = () => {
-
-// }
-
-export default List;
+// export default Tasks;
+export { exportTasks, newTask, updateTask, deleteTask };

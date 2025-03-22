@@ -27,7 +27,7 @@ const NavBar = () => {
 
   return (
     <div className="bg-blue-500 p-3 w-full flex flex-row justify-between items-center">
-      <h1 className="text-2xl text-white">Mini Tasks</h1>
+      <h1 className="text-2xl text-white">Taskify Web</h1>
       <button
         className="border-2 p-2 rounded-full border-white"
         onClick={handleTheme}

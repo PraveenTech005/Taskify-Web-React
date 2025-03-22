@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import List from "./data";
+import { exportTasks, newTask, updateTask } from "./data";
 
 const NEVModal = ({ modal, setShowModal }) => {
+  const List = exportTasks();
   const isView = modal.type === "View";
   const [task, setTask] = useState(
     modal.type === "Edit" || modal.type === "View"
@@ -17,7 +18,15 @@ const NEVModal = ({ modal, setShowModal }) => {
   const submitData = () => {
     const Data = task;
     if (Data.title !== "" && Data.description !== "") {
-      List.push(Data);
+      newTask(Data);
+      setShowModal(false);
+    } else alert("No Data");
+  };
+
+  const updateData = () => {
+    const Data = task;
+    if (Data.title !== "" && Data.description !== "") {
+      updateTask(Data, modal.id);
       setShowModal(false);
     } else alert("No Data");
   };
@@ -97,7 +106,7 @@ const NEVModal = ({ modal, setShowModal }) => {
           </button>
           <button
             className="bg-blue-700 py-2 px-8 rounded-xl font-bold text-white"
-            onClick={submitData}
+            onClick={modal.type === "New" ? submitData : updateData}
           >
             Save
           </button>
