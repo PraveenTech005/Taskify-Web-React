@@ -7,6 +7,12 @@ import { deleteTask, exportTasks } from "./data";
 import { MdDeleteForever } from "react-icons/md";
 
 const Home = () => {
+  const [SFS, setSFS] = useState({
+    search: "",
+    filter: "",
+    sort: "",
+  });
+  const [toggler, setToggler] = useState("");
   const [task, setTask] = useState(exportTasks());
   const [showModal, setShowModal] = useState(false);
   const [modal, setModal] = useState({
@@ -14,27 +20,93 @@ const Home = () => {
     id: null,
   });
 
+  const searchTask = (e) => {
+    const searchTerm = e.currentTarget.value;
+    setSFS({ ...SFS, search: searchTerm });
+
+    if (searchTerm === "") {
+      setTask(exportTasks());
+      return;
+    }
+
+    const filteredTasks = exportTasks().filter((item) =>
+      item.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    setTask(filteredTasks);
+  };
+
+  const filterTask = (filterItem) => {
+    setSFS((prev) => ({
+      ...prev,
+      filter: prev.filter === filterItem ? "" : filterItem,
+    }));
+
+    if (SFS.filter === filterItem) {
+      setTask(exportTasks());
+    } else {
+      setTask(exportTasks().filter((item) => item.priority === filterItem));
+    }
+  };
+
   return (
     <>
       <div className="w-full min-h-screen dark:bg-[#0e1118] dark:text-white space-y-5">
         <NavBar />
-        <div className="w-full flex flex-row justify-evenly items-center">
-          <input
-            placeholder="Search..."
-            className="w-7/12 dark:bg-black py-2 px-5 rounded-full border-2 "
-          />
-          <button className="border-2 p-3 rounded-full">
-            <FaFilter />
-          </button>
-          <button className="border-2 p-3 rounded-full">
-            <FaSort />
-          </button>
+        <div className="w-full flex flex-col justify-evenly items-center space-y-5">
+          <div className="w-full flex flex-row justify-evenly items-center">
+            <input
+              value={SFS.search}
+              onChange={(e) => searchTask(e)}
+              jsk
+              placeholder="Search..."
+              className="w-7/12 dark:bg-black py-2 px-5 rounded-full border-2 "
+            />
+            <button className="border-2 p-3 rounded-full">
+              <FaFilter />
+            </button>
+            <button className="border-2 p-3 rounded-full">
+              <FaSort />
+            </button>
+          </div>
+          {toggler === "filter" ? (
+            <div className="w-full flex flex-row justify-evenly items-center">
+              {["Low", "Average", "High"].map((item, index) => (
+                <button
+                  key={index}
+                  className={`p-2 px-4 rounded-full ${
+                    SFS.filter === item
+                      ? item === "Low"
+                        ? "bg-green-600"
+                        : item === "Average"
+                        ? "bg-amber-400"
+                        : "bg-red-700"
+                      : "bg-neutral-300 dark:bg-neutral-700"
+                  } font-bold`}
+                  onClick={() => filterTask(item)}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className="w-10/12 flex flex-row flex-wrap justify-evenly items-center">
+              {["A - Z", "Z - A", "Pri. Low", "Pri. High"].map((item) => (
+                <div
+                  key={item}
+                  className="w-5/12 text-center border-2 m-1 p-2 text-sm rounded-full"
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-        <div className="w-full flex flex-col space-y-5 p-3">
+        <div className="w-full flex flex-col space-y-5 p-3 justify-center items-center">
           {task.map((item) => (
             <div
               key={item.id}
-              className="w-full flex flex-row justify-between items-center py-3 px-5 bg-neutral-300 dark:bg-neutral-800 rounded-2xl"
+              className="w-full sm:max-w-10/12 flex flex-row justify-between items-center py-3 px-5 bg-neutral-300 dark:bg-neutral-800 rounded-2xl"
               onClick={() => {
                 setModal({ type: "View", id: item.id });
                 setShowModal(true);

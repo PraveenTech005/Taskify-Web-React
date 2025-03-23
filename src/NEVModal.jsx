@@ -10,9 +10,9 @@ const NEVModal = ({ modal, setShowModal }) => {
           title: "",
           description: "",
           due: "No Due",
-          priority: "",
+          priority: "Low",
         }
-      : { title: "", description: "", due: "No Due", priority: "" }
+      : { title: "", description: "", due: "No Due", priority: "Low" }
   );
 
   const submitData = () => {
